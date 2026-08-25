@@ -40,13 +40,11 @@ func (q *Queryer) QueryAccount(employeeID string) (QueryResult, error) {
 		return QueryResult{}, fmt.Errorf("query policy does not cover all domains")
 	}
 	account.Office, account.Telephony, account.Quality = statuses[0], statuses[1], statuses[2]
-	result := QueryResult{Account: account, DisplayName: entry.DisplayName, SourceScopes: append([]domain.DomainName(nil), q.policy.Allowed...)}
-	result.ExtraFields = map[string]string{
-		"payroll_group":   entry.PayrollGroup,
-		"home_directory":  entry.HomeDirectory,
-		"security_groups": fmt.Sprintf("%v", entry.SecurityGroups),
-	}
-	return result, nil
+	// The troubleshooting result exposes only the three authorized domains
+	// (office, telephony, quality). Unrelated directory attributes such as
+	// payroll group, home directory, and security groups are intentionally
+	// omitted so IsScoped reports the result as properly scoped.
+	return QueryResult{Account: account, DisplayName: entry.DisplayName, SourceScopes: append([]domain.DomainName(nil), q.policy.Allowed...)}, nil
 }
 
 func (q *Queryer) QueryMany(employeeIDs []string) ([]QueryResult, error) {
