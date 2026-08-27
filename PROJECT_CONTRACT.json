@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2510,
+    "production_files": 43,
+    "production_packages": 9,
+    "test_files": 10,
+    "production_functions": 213,
+    "decision_points": 343
+  },
+  "persistence": {
+    "module": "modernc.org/sqlite",
+    "entities": [
+      "AgentAccount",
+      "TroubleshootingRecord",
+      "DomainStatus",
+      "AuditEvent"
+    ],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": [
+        "Team leader submits employee ID and administrator identity",
+        "Service validates the employee ID and authorized scope",
+        "Query adapters read office telephony and quality fixtures",
+        "Repository stores the troubleshooting record and audit event",
+        "Service returns the scoped three-domain status"
+      ],
+      "test": "TestPrimaryWorkflow"
+    },
+    {
+      "steps": [
+        "Open the embedded SQLite storage",
+        "Load records for an employee",
+        "Project records into an operational history view",
+        "Attach audit events for traceability",
+        "Return history to the administrator"
+      ],
+      "test": "TestSecondaryWorkflow"
+    },
+    {
+      "steps": [
+        "Check storage and fixture health",
+        "Aggregate domain status counts",
+        "Format a deterministic operational summary",
+        "Record the export action in the audit trail",
+        "Return the summary through the CLI entrypoint"
+      ],
+      "test": "TestTertiaryWorkflow"
+    }
+  ]
+}
